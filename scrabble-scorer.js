@@ -38,15 +38,59 @@ function initialPrompt() {
    return word;
 };
 
-let simpleScorer;
+let simpleScorer = function(word) {
+   word = word.toUpperCase();
+   let letterPoints = word.length;
+   return letterPoints;
+};
 
-let vowelBonusScorer;
+let vowelBonusScorer = function(word) {
+   word = word.toUpperCase();
+   let vowelArr = ['A','E','I','O','U'];
+   let points = 0;
+   for (let i = 0; i < word.length; i++){
+      if (vowelArr.includes(word[i])) {
+         points = points + 3
+      } else {
+         points = points + 1
+      }
+   }
+   return points;
+};
 
 let scrabbleScorer;
 
-const scoringAlgorithms = [];
+const scoringAlgorithms = [
+   {
+      name: 'Simple',
+      description: 'Each letter is worth 1 point.',
+      scoringFunction: simpleScorer
+   },
+   {
+      name: 'Bonus Vowels',
+      description: 'Vowels are 3 pts, consonants are 1 pt.',
+      scoringFunction: vowelBonusScorer
+   },
+   {
+      name: 'Scrabble',
+      description: 'The traditional scoring algorithm.',
+      scoringFunction: oldScrabbleScorer
+   }];
 
-function scorerPrompt() {}
+function scorerPrompt(word) {
+   console.log('What scoring method would you like to use? \n')
+   console.log(`0 - ${scoringAlgorithms[0].name}: ${scoringAlgorithms[0].description}`)
+   console.log(`1 - ${scoringAlgorithms[1].name}: ${scoringAlgorithms[1].description}`)
+   console.log(`2 - ${scoringAlgorithms[2].name}: ${scoringAlgorithms[2].description}`)
+   let scorerChoice = input.question(`Enter 0, 1, or 2: `)
+   if (scorerChoice === '0'){
+      return `Score for ${word}: ${scoringAlgorithms[0].scoringFunction(word)}`;
+   } else if (scorerChoice === '1') {
+      return `Score for ${word}: ${scoringAlgorithms[1].scoringFunction(word)}`;
+   } else if (scorerChoice === '2') {
+      return `Score for ${word}: ${scoringAlgorithms[2].scoringFunction(word)}`;
+   } else return 'Invalid choice'
+}
 
 function transform() {};
 
@@ -54,8 +98,8 @@ let newPointStructure;
 
 function runProgram() {
    let word = initialPrompt();
-   let result = oldScrabbleScorer(word);
-   console.log(result)
+   let score = scorerPrompt(word);
+   console.log(score)
    
 }
 
