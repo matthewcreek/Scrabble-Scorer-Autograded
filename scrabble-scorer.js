@@ -92,13 +92,24 @@ function scorerPrompt(word) {
    } else return 'Invalid choice'
 }
 
-function transform() {};
+function transform(structureObj) {
+   //iterate through the old point structure using a for...in and within that for...in use a for loop to add values of that point structure to a new point structure
+   let newStructure = {}
+   for (pointValue in structureObj) {
+      for (let i = 0; i < structureObj[pointValue].length; i++){
+         console.log(structureObj[pointValue][i])
+         newStructure[structureObj[pointValue][i]] = pointValue
+      }
+      console.log(newStructure)
+   }
+};
 
-let newPointStructure;
+let newPointStructure = transform(oldPointStructure);
 
 function runProgram() {
    let word = initialPrompt();
    let score = scorerPrompt(word);
+   console.log(transform(oldPointStructure))
    console.log(score)
    
 }
