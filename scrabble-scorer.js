@@ -58,23 +58,34 @@ let vowelBonusScorer = function(word) {
    return points;
 };
 
-let scrabbleScorer;
+let scrabbleScorer = function(word) {
+   word = word.toLowerCase();
+   let points = 0;
+   for (let i = 0; i < word.length; i++) {
+      for (key in newPointStructure) {
+         if (word[i] === key) {
+            points += newPointStructure[key]
+         }
+      }
+   }
+   return points;
+};
 
 const scoringAlgorithms = [
    {
       name: 'Simple',
       description: 'Each letter is worth 1 point.',
-      scoringFunction: simpleScorer
+      scorerFunction: simpleScorer
    },
    {
       name: 'Bonus Vowels',
       description: 'Vowels are 3 pts, consonants are 1 pt.',
-      scoringFunction: vowelBonusScorer
+      scorerFunction: vowelBonusScorer
    },
    {
       name: 'Scrabble',
       description: 'The traditional scoring algorithm.',
-      scoringFunction: oldScrabbleScorer
+      scorerFunction: scrabbleScorer
    }];
 
 function scorerPrompt(word) {
@@ -84,11 +95,11 @@ function scorerPrompt(word) {
    console.log(`2 - ${scoringAlgorithms[2].name}: ${scoringAlgorithms[2].description}`)
    let scorerChoice = input.question(`Enter 0, 1, or 2: `)
    if (scorerChoice === '0'){
-      return `Score for ${word}: ${scoringAlgorithms[0].scoringFunction(word)}`;
+      return `Score for ${word}: ${scoringAlgorithms[0].scorerFunction(word)}`;
    } else if (scorerChoice === '1') {
-      return `Score for ${word}: ${scoringAlgorithms[1].scoringFunction(word)}`;
+      return `Score for ${word}: ${scoringAlgorithms[1].scorerFunction(word)}`;
    } else if (scorerChoice === '2') {
-      return `Score for ${word}: ${scoringAlgorithms[2].scoringFunction(word)}`;
+      return `Score for ${word}: ${scoringAlgorithms[2].scorerFunction(word)}`;
    } else return 'Invalid choice'
 }
 
@@ -101,7 +112,6 @@ function transform(structureObj) {
          newStructure[structureObj[pointValue][i]] = Number(pointValue)
       }
    }
-   console.log(newStructure)
    return newStructure;
 };
 
@@ -110,7 +120,6 @@ let newPointStructure = transform(oldPointStructure);
 function runProgram() {
    let word = initialPrompt();
    let score = scorerPrompt(word);
-   // console.log(transform(oldPointStructure))
    console.log(score)
    
 }
